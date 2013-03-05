@@ -21,6 +21,9 @@
     </target>
 
     <target name="run" depends="compile">
+        <copy todir="${classes}/resources">
+            <fileset dir="resources"/>
+        </copy>
         <java classname="HelloWorld">
             <classpath location="classes"/>
             <classpath refid="rythm.jars"/>
