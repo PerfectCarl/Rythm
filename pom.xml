@@ -18,10 +18,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.greenlaw110.rythm</groupId>
+    <groupId>org.rythmengine</groupId>
     <artifactId>rythm-engine</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-b4-SNAPSHOT</version>
+    <version>1.0-b9-SNAPSHOT</version>
 
     <name>Rythm Template Engine</name>
     <description>A strong typed high performance Java Template engine with .Net Razor like syntax</description>
@@ -55,29 +55,24 @@
         </license>
     </licenses>
 
-    <!-- see http://www.sonatype.com/people/2009/02/why-putting-repositories-in-your-poms-is-a-bad-idea/ 
-    <repositories>
-        <repository>
-            <id>com.google.code.maven-play-plugin</id>
-            <name>Maven Play Plugin - releases</name>
-            <url>http://maven-play-plugin.googlecode.com/svn/mavenrepo/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    -->
-
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
                     <encoding>UTF-8</encoding>
+                    <debuglevel>lines,vars,source</debuglevel>
                 </configuration>
             </plugin>
             <plugin>
@@ -87,25 +82,6 @@
                 <configuration>
                     <includePom>true</includePom>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <stylesheetfile>src/etc/javadoc.css</stylesheetfile>
-                    <excludePackageNames>com.greenlaw110.rythm.internal.*</excludePackageNames>
-                    <quiet />
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>gen-javadoc</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <!--
             <plugin>
@@ -126,6 +102,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${basedir}/lib</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
             </plugin>
             -->
         </plugins>
@@ -169,6 +159,14 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
+    
     </dependencies>
 
     <profiles>
@@ -198,6 +196,25 @@
                                         <descriptor>${basedir}/assembly-dist.xml</descriptor>
                                     </descriptors>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9</version>
+                        <configuration>
+                            <stylesheetfile>src/etc/javadoc.css</stylesheetfile>
+                            <excludePackageNames>org.rythmengine.internal.*</excludePackageNames>
+                            <quiet />
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>gen-javadoc</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>javadoc</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
